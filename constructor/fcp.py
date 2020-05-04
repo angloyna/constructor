@@ -185,6 +185,8 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
     )
     precs = list(solver.solve_final_state())
 
+    print(f'this is precs: {precs}, in _main')
+
     if not install_in_dependency_order:
         precs = sorted(precs, key="name")
 
