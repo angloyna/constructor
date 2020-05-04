@@ -185,8 +185,9 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
         specs_to_add=specs,
     )
     precs = list(solver.solve_final_state())
-    print(SubdirData.query_all(precs[0], channels=channel_urls))
-    print('did that work at all?')
+    for prec in precs:
+        print(SubdirData.query_all(prec.name, channels=channel_urls))
+        print('did that work at all?')
 
     print(f'this is precs: {precs}, in _main')
 
