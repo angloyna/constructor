@@ -12,6 +12,7 @@ from collections import defaultdict
 import json
 from os.path import getsize, isdir, isfile, join
 import sys
+from operator import attrgetter
 
 from conda.api import SubdirData
 from constructor.utils import md5_files
@@ -188,8 +189,10 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
     for prec in precs:
         all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
         print(list(all_packages))
+        most_recent = sorted(all_packages, key=attrgetter('version'), reverse=True)
     print()
     print()
+    print(most_recent)
     print('did that work at all?')
 
     print(f'this is precs: {precs}, in _main')
