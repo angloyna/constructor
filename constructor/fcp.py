@@ -56,7 +56,7 @@ def exclude_packages(precs, exclude=()):
     return accepted_precs
 
 
-def _show(name, version, platform, download_dir, precs):
+def _show(name, version, platform, download_dir, precs, latest_versions={}):
     print("""
 name: %(name)s
 version: %(version)s
@@ -69,7 +69,11 @@ platform: %(platform)s""" % dict(
     ))
     print("number of package: %d" % len(precs))
     for prec in precs:
-        print('    %s' % prec.fn)
+        latest_version = latest_versions.get(prec.name, None)
+        if latest_version:
+            print('    %s (latest: %s)' % prec.fn, latest_version)
+        else:
+            print('    %s' % prec.fn)
     print()
 
 
@@ -191,10 +195,11 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
         specs_to_add=specs,
     )
     precs = list(solver.solve_final_state())
+    latest_versions = {}
     for prec in precs:
         all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
         most_recent = sorted(all_packages, key=lambda package_record: (parse_version(package_record.version), package_record.build_number), reverse=True)
-        print(most_recent[0].name)
+        latest_versions[prec.name] = most_recent[0]
         print('that was most recent')
     print()
     print()
@@ -213,7 +218,7 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
     precs = exclude_packages(precs, exclude)
 
     if verbose:
-        _show(name, version, platform, download_dir, precs)
+        _show(name, version, platform, download_dir, precs, latest_versions=latest_versions)
 
     if dry_run:
         return
