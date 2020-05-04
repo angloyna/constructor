@@ -199,7 +199,7 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
     for prec in precs:
         all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
         most_recent = sorted(all_packages, key=lambda package_record: (parse_version(package_record.version), package_record.build_number), reverse=True)
-        if parse_version(prec.version) < parse_version(most_recent.version):
+        if parse_version(prec.version) < parse_version(most_recent[0].version):
             latest_versions[prec.name] = most_recent[0]
 
     if not install_in_dependency_order:
