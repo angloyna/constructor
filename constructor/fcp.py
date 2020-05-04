@@ -13,6 +13,7 @@ import json
 from os.path import getsize, isdir, isfile, join
 import sys
 
+from conda.api import SubdirData
 from constructor.utils import md5_files
 from .conda_interface import (PackageCacheData, PackageCacheRecord, Solver, concatv, conda_context,
                               conda_replace_context_default, download, env_vars, groupby, read_paths_json,
@@ -184,6 +185,8 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
         specs_to_add=specs,
     )
     precs = list(solver.solve_final_state())
+    print(Subdirdata.query_all(precs[0], channels=channel_urls))
+    print('did that work at all?')
 
     print(f'this is precs: {precs}, in _main')
 
