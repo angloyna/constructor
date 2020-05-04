@@ -190,18 +190,14 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
         all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
         print(list(all_packages))
         most_recent = sorted(all_packages, key=attrgetter('version'), reverse=True)
+        print(most_recent[0])
+        print('that was most recent')
     print()
     print()
-    print(most_recent)
     print('did that work at all?')
 
-    print(f'this is precs: {precs}, in _main')
-    print(install_in_dependency_order)
-    print('that should be false')
     if not install_in_dependency_order:
         precs = sorted(precs, key="name")
-        print(f'precs again')
-        print(precs)
 
     # move python first
     python_prec = next(prec for prec in precs if prec.name == "python")
