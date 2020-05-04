@@ -14,6 +14,11 @@ from os.path import getsize, isdir, isfile, join
 import sys
 from operator import attrgetter
 
+try:
+    from packaging.version import parse as parse_version
+except ImportError:
+    from pip._vendor.packaging.version import parse as parse_version
+
 from conda.api import SubdirData
 from constructor.utils import md5_files
 from .conda_interface import (PackageCacheData, PackageCacheRecord, Solver, concatv, conda_context,
@@ -189,7 +194,7 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
     for prec in precs:
         all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
         print(list(all_packages))
-        most_recent = sorted(all_packages, key=attrgetter('version'), reverse=True)
+        most_recent = sorted(all_packages, key=parse_version(attrgetter('version')), reverse=True)
         print(most_recent[0])
         print('that was most recent')
     print()
