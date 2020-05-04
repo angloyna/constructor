@@ -55,6 +55,15 @@ def exclude_packages(precs, exclude=()):
             sys.exit("Error: no package named '%s' to remove" % name)
     return accepted_precs
 
+def _find_out_of_date_precs(precs, channel_urls, platform):
+    out_of_date_package_records = {}
+    for prec in precs:
+        all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
+        most_recent = sorted(all_packages, key=lambda package_record: (parse_version(package_record.version), package_record.build_number), reverse=True)
+        print(f'prec name: {prec.name}, parsed version: {parse_version(prec.version)}, most recent: {parse_version(most_recent[0].version)}')
+        if parse_version(prec.version) < parse_version(most_recent[0].version):
+            out_of_date_package_records[prec.name] = most_recent[0]
+    return out_of_date_package_records
 
 def _show(name, version, platform, download_dir, precs, latest_versions={}):
     print("""
@@ -195,12 +204,6 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
         specs_to_add=specs,
     )
     precs = list(solver.solve_final_state())
-    latest_versions = {}
-    for prec in precs:
-        all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
-        most_recent = sorted(all_packages, key=lambda package_record: (parse_version(package_record.version), package_record.build_number), reverse=True)
-        if parse_version(prec.version) < parse_version(most_recent[0].version):
-            latest_versions[prec.name] = most_recent[0]
 
     if not install_in_dependency_order:
         precs = sorted(precs, key="name")
@@ -215,6 +218,7 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
     precs = exclude_packages(precs, exclude)
 
     if verbose:
+        latest_versions = _find_out_of_date_precs(precs, channel_urls, platform)
         _show(name, version, platform, download_dir, precs, latest_versions=latest_versions)
 
     if dry_run:
