@@ -71,7 +71,7 @@ platform: %(platform)s""" % dict(
     for prec in precs:
         latest_version = latest_versions.get(prec.name, None)
         if latest_version:
-            print('    %s (latest: %s)' % prec.fn, latest_version)
+            print('    %s (latest: %s)' % [prec.fn, latest_version])
         else:
             print('    %s' % prec.fn)
     print()
