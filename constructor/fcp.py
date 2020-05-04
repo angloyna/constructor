@@ -187,7 +187,7 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
     precs = list(solver.solve_final_state())
     for prec in precs:
         all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
-        most_recent = sorted(all_packages, key="version", reverse=True)[0]
+        most_recent = sorted(all_packages, key="version", reverse=True)
         print(most_recent)
         print('did that work at all?')
 
