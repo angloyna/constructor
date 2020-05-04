@@ -198,9 +198,12 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
         print('did that work at all?')
 
     print(f'this is precs: {precs}, in _main')
-
+    print(install_in_dependency_order)
+    print('that should be false')
     if not install_in_dependency_order:
         precs = sorted(precs, key="name")
+        print(f'precs again')
+        print(precs)
 
     # move python first
     python_prec = next(prec for prec in precs if prec.name == "python")
