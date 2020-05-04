@@ -191,7 +191,7 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
         print('this is precs')
         print()
         print(precs)
-        most_recent = sorted(all_packages, key="name")
+        most_recent = sorted(list(all_packages), key="name")
         print(most_recent)
         print()
         print()
