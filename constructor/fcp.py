@@ -12,7 +12,6 @@ from collections import defaultdict
 import json
 from os.path import getsize, isdir, isfile, join
 import sys
-from operator import attrgetter
 
 from packaging.version import parse as parse_version
 
