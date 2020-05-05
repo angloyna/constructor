@@ -65,6 +65,8 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
         latest_version = parse_version(most_recent.version)
         if prec_version < latest_version or (prec_version == latest_version
           and prec.build_number < most_recent.build_number):
+            if most_recent.name == 'openssl':
+                print(most_recent)
             out_of_date_package_records[prec.name] = most_recent
     return out_of_date_package_records
 
