@@ -58,9 +58,9 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
             most_recent_list = [VersionOrder(o.version) for o in all_versions]
             print(most_recent_list)
             print('was that it')
-            most_recent = max(all_versions, key=lambda package_version: (parse_version(package_version.version), package_version.build_number))
-            prec_version = VersionSpec(prec.version)
-            latest_version = VersionSpec(most_recent.version)
+            most_recent = max(all_versions, key=lambda package_version: (VersionOrder(package_version.version), package_version.build_number))
+            prec_version = VersionOrder(prec.version)
+            latest_version = VersionOrder(most_recent.version)
             print(f'whoo {prec_version}, {latest_version}')
             if prec_version < latest_version or (prec_version == latest_version
               and prec.build_number < most_recent.build_number):
