@@ -14,13 +14,12 @@ from os.path import getsize, isdir, isfile, join
 import sys
 from operator import attrgetter
 
-from packaging.version import LegacyVersion, parse as parse_version
+from packaging.version import parse as parse_version
 
-from conda.api import SubdirData
 from constructor.utils import md5_files
 from .conda_interface import (PackageCacheData, PackageCacheRecord, Solver, concatv, conda_context,
                               conda_replace_context_default, download, env_vars, groupby, read_paths_json,
-                              all_channel_urls)
+                              all_channel_urls, query_all_by_subdir)
 
 
 def warn_menu_packages_missing(precs, menu_packages):
@@ -55,7 +54,7 @@ def exclude_packages(precs, exclude=()):
 def _find_out_of_date_precs(precs, channel_urls, platform):
     out_of_date_package_records = {}
     for prec in precs:
-        all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
+        all_packages = query_all_by_subdir(prec.name, channels=channel_urls, subdirs=[platform])
         most_recent = max(all_packages, key=lambda package_version: (parse_version(package_version.version), package_version.build_number, package_version.timestamp))
         prec_version = parse_version(prec.version)
         latest_version = parse_version(most_recent.version)
@@ -77,9 +76,9 @@ platform: %(platform)s""" % dict(
     ))
     print("number of package: %d" % len(precs))
     for prec in precs:
-        latest_version = latest_versions.get(prec.name, None)
+        more_recent_version = latest_versions.get(prec.name, None)
         if latest_version:
-            print('    %s (latest: %s)' % (prec.fn, latest_version))
+            print('    %s (latest: %s)' % (prec.fn, more_recent_version))
         else:
             print('    %s' % prec.fn)
     print()
