@@ -61,11 +61,11 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
         all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
         #most_recent = sorted(all_packages, key=lambda package_record: (parse_version(package_record.version), package_record.build_number), reverse=True)
         most_recent = all_packages[0]
-        print(f'prec name: {prec.name}, parsed version: {parse_version(prec.version)}, most recent: {parse_version(most_recent[0].version)}')
+        print(f'prec name: {prec.name}, parsed version: {parse_version(prec.version)}, most recent: {parse_version(most_recent.version)}')
         prec_version = parse_version(prec.version)
-        latest_version = parse_version(most_recent[0].version)
+        latest_version = parse_version(most_recent.version)
         if prec_version < latest_version or (prec_version == latest_version and prec.build_number < most_recent[0].build_number):
-            out_of_date_package_records[prec.name] = most_recent[0]
+            out_of_date_package_records[prec.name] = most_recent
     return out_of_date_package_records
 
 def _show(name, version, platform, download_dir, precs, latest_versions={}):
