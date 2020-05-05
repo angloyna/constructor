@@ -55,7 +55,7 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
     out_of_date_package_records = {}
     for prec in precs:
         all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
-        most_recent = max(all_packages, key=lambda package_version: (parse_version(package_version.version), package_version.build_number, package_version.timestamp))
+        most_recent = max(all_packages, key=lambda package_version: (parse_version(package_version.version), package_version.build_number))
         prec_version = parse_version(prec.version)
         latest_version = parse_version(most_recent.version)
         if prec_version < latest_version or (prec_version == latest_version
@@ -245,11 +245,8 @@ def main(info, verbose=True, dry_run=False):
     download_dir = info["_download_dir"]
     platform = info["_platform"]
     channel_urls = all_channel_urls(info.get("channels", ()))
-    print(f'this is channel_urls: {channel_urls}')  
     channels_remap = info.get('channels_remap', ())
-    print(f'this is channel remap: {channels_remap}')
     specs = info["specs"]
-    print(f'specs: {specs}')
     exclude = info.get("exclude", ())
     menu_packages = info.get("menu_packages", ())
     install_in_dependency_order = info.get("install_in_dependency_order", True)
