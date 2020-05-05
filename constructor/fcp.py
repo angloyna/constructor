@@ -59,9 +59,8 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
             prec_version = parse_version(prec.version)
             latest_version = parse_version(most_recent.version)
             if prec_version < latest_version or (prec_version == latest_version
-            and prec.build_number < most_recent.build_number):
-                print(most_recent.__dict__)
-                out_of_date_package_records[prec.name] = most_recent.name
+              and prec.build_number < most_recent.build_number):
+                out_of_date_package_records[prec.name] = most_recent
     return out_of_date_package_records
 
 def _show(name, version, platform, download_dir, precs, more_recent_versions={}):
@@ -221,7 +220,7 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
         _show(name, version, platform, download_dir, precs, more_recent_versions)
 
     if dry_run:
-        return
+        return None, None, None, None
 
     pc_recs = _fetch(download_dir, precs)
     # Constructor cache directory can have multiple packages from different
