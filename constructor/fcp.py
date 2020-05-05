@@ -14,10 +14,7 @@ from os.path import getsize, isdir, isfile, join
 import sys
 from operator import attrgetter
 
-try:
-    from packaging.version import parse as parse_version
-except ImportError:
-    from pip._vendor.packaging.version import parse as parse_version
+from packaging.version import parse as parse_version
 
 from conda.api import SubdirData
 from constructor.utils import md5_files
