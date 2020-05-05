@@ -55,7 +55,7 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
     for prec in precs:
         all_versions = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
         if all_versions:
-            most_recent = max(all_versions, key=lambda package_version: (VersionOrder(package_version.version), package_version.build_number))
+            most_recent = max(all_versions, key=lambda package_version: (VersionOrder(package_version.version), package_version.build))
             prec_version = VersionOrder(prec.version)
             latest_version = VersionOrder(most_recent.version)
             if prec_version < latest_version or (prec_version == latest_version
