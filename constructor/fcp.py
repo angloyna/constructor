@@ -62,7 +62,7 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
             out_of_date_package_records[prec.name] = most_recent
     return out_of_date_package_records
 
-def _show(name, version, platform, download_dir, precs, latest_versions={}):
+def _show(name, version, platform, download_dir, precs, more_recent_versions={}):
     print("""
 name: %(name)s
 version: %(version)s
@@ -75,7 +75,7 @@ platform: %(platform)s""" % dict(
     ))
     print("number of package: %d" % len(precs))
     for prec in precs:
-        more_recent_version = latest_versions.get(prec.name, None)
+        more_recent_version = more_recent_versions.get(prec.name, None)
         if more_recent_version:
             print('    %s (latest: %s)' % (prec.fn, more_recent_version))
         else:
@@ -215,8 +215,8 @@ def _main(name, version, download_dir, platform, channel_urls=(), channels_remap
     precs = exclude_packages(precs, exclude)
 
     if verbose:
-        latest_versions = _find_out_of_date_precs(precs, channel_urls, platform)
-        _show(name, version, platform, download_dir, precs, latest_versions=latest_versions)
+        more_recent_versions = _find_out_of_date_precs(precs, channel_urls, platform)
+        _show(name, version, platform, download_dir, precs, more_recent_versions)
 
     if dry_run:
         return
