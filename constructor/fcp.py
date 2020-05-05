@@ -16,7 +16,7 @@ import sys
 from packaging.version import parse as parse_version
 
 from constructor.utils import md5_files
-from .conda_interface import (PackageCacheData, VersionOrder, PackageCacheRecord, Solver, SubdirData, VersionSpec, concatv, conda_context,
+from .conda_interface import (PackageCacheData, PackageCacheRecord, Solver, SubdirData, VersionOrder, concatv, conda_context,
                               conda_replace_context_default, download, env_vars, groupby, read_paths_json,
                               all_channel_urls)
 
@@ -55,13 +55,9 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
     for prec in precs:
         all_versions = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
         if all_versions:
-            most_recent_list = [VersionOrder(o.version) for o in all_versions]
-            print(most_recent_list)
-            print('was that it')
             most_recent = max(all_versions, key=lambda package_version: (VersionOrder(package_version.version), package_version.build_number))
             prec_version = VersionOrder(prec.version)
             latest_version = VersionOrder(most_recent.version)
-            print(f'whoo {prec_version}, {latest_version}')
             if prec_version < latest_version or (prec_version == latest_version
               and prec.build_number < most_recent.build_number):
                 out_of_date_package_records[prec.name] = most_recent
