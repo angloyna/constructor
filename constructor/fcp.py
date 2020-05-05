@@ -77,7 +77,7 @@ platform: %(platform)s""" % dict(
     print("number of package: %d" % len(precs))
     for prec in precs:
         more_recent_version = latest_versions.get(prec.name, None)
-        if latest_version:
+        if more_recent_version:
             print('    %s (latest: %s)' % (prec.fn, more_recent_version))
         else:
             print('    %s' % prec.fn)
