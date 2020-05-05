@@ -53,10 +53,9 @@ def exclude_packages(precs, exclude=()):
 def _find_out_of_date_precs(precs, channel_urls, platform):
     out_of_date_package_records = {}
     for prec in precs:
-        all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
-        all_packages = list()
-        if all_packages:
-            most_recent = max(all_packages, key=lambda package_version: (parse_version(package_version.version), package_version.build_number))
+        all_versions = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
+        if all_versions:
+            most_recent = max(all_versions, key=lambda package_version: (parse_version(package_version.version), package_version.build_number))
             prec_version = parse_version(prec.version)
             latest_version = parse_version(most_recent.version)
             if prec_version < latest_version or (prec_version == latest_version
