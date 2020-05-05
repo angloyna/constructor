@@ -59,7 +59,8 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
         latest_version = parse_version(most_recent.version)
         if prec_version < latest_version or (prec_version == latest_version
           and prec.build_number < most_recent.build_number):
-            out_of_date_package_records[prec.name] = '%s_%s_%s' % (most_recent.name, most_recent.version, most_recent.build)
+            print(most_recent.__dict__)
+            out_of_date_package_records[prec.name] = '%s-%s_%s' % (most_recent.name, most_recent.version, most_recent.build)
     return out_of_date_package_records
 
 def _show(name, version, platform, download_dir, precs, more_recent_versions={}):
