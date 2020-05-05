@@ -58,7 +58,7 @@ def _find_out_of_date_precs(precs, channel_urls, platform):
         all_packages = SubdirData.query_all(prec.name, channels=channel_urls, subdirs=[platform])
         if prec.name == 'openssl':
             print(all_packages)
-        most_recent = max(all_packages, key=lambda package_version: (parse_version(package_version.version), package_version.build_number) if not isinstance(parse_version(package_version.version), LegacyVersion) else (parse_version(package_version.version).base_version, package_version.timestamp))
+        most_recent = max(all_packages, key=lambda package_version: (parse_version(package_version.version), package_version.build_number) if not isinstance(parse_version(package_version.version), LegacyVersion) else package_version.timestamp)
         prec_version = parse_version(prec.version)
         latest_version = parse_version(most_recent.version)
         print(f'prec name: {prec.name}, parsed version: {prec_version}, most recent: {latest_version}')
